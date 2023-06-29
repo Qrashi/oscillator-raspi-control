@@ -1,4 +1,4 @@
-import i2c_lib
+import display.modules.i2c_lib as i2c_lib
 from time import *
 import sys
 

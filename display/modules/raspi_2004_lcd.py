@@ -8,7 +8,7 @@ class Raspi_2004_lcd(DisplayModule):
     """
     def __init__(self):
         super(Raspi_2004_lcd, self).__init__(DisplaySize(*SIZE))
-        import lcddriver
+        import display.modules.lcddriver as lcddriver
         self.lcd = lcddriver.lcd()
 
     def display_line(self, line: int, content: str):
