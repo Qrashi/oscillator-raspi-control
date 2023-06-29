@@ -7,7 +7,7 @@ class Raspi_2004_lcd(DisplayModule):
     A controller to control a 20x4 lcd using a raspberry pi
     """
     def __init__(self):
-        super(raspi_2004_lcd, self).__init__(DisplaySize(*SIZE))
+        super(Raspi_2004_lcd, self).__init__(DisplaySize(*SIZE))
         import lcddriver
         self.lcd = lcddriver.lcd()
 
