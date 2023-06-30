@@ -18,5 +18,5 @@ class Raspi_2004_lcd(DisplayModule):
         :param content: content to display
         :return:
         """
-        self.lcd.lcd_display_string(content, line+1)
+        self.lcd.lcd_display_string(content, line)
 
