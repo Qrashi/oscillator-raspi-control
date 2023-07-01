@@ -7,8 +7,8 @@ class GPIOButtons(ButtonModule):
 
     def __init__(self):
         self.buttons = [
-            Button(4),
-            Button(17)
+            Button(17),
+            Button(4)
         ]
 
     def check_status(self, buttonID: int) -> bool:

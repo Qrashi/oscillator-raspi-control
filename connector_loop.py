@@ -123,6 +123,7 @@ def check_buttons(button_module: ButtonManager):
                 update_display()
     else:
         if button_module.confirmed() or button_module.experiment():
+            print("reg")
             display.center(3, "[press] registered!")
 
 def handle_message(client_socket: socket.socket, connection_type: str):
@@ -225,9 +226,9 @@ def update_display():
 
         display.center(3, "ready to connect")
         if datetime.now().second % 4 < 2:
-            display.center(1, "⨯ camera link ⨯" if state.camera_link_last_ping == 0 else "✓ camera link ✓")
+            display.center(1, "x camera link x" if state.camera_link_last_ping == 0 else "OK camera link OK")
         else:
-            display.center(1, "⨯ tracker link ⨯" if state.tracker_link_last_ping == 0 else "✓ tracker link ✓")
+            display.center(1, "x tracker link x" if state.tracker_link_last_ping == 0 else "OK tracker link OK")
 
         display.center(2, state.ip)
 
