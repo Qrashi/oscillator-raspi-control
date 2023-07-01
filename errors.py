@@ -25,7 +25,7 @@ def report_error(description: str, exception: Union[None, Exception, str] = None
     except Exception:
         exception = "Could not save exception - not serializeable"
 
-    print("! " + description)
+    # print("! " + description)
 
     __errors.json.append(
         {

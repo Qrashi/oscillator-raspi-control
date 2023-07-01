@@ -99,5 +99,8 @@ class DisplayModule(abc.ABC):
         :return:
         """
         content = content.replace("\n", "")
+        if content == self._content[line]:
+            # content is already being displayed
+            return
         self._content[line] = content
         self.display_line(line, content)

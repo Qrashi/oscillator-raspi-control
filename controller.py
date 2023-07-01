@@ -9,6 +9,7 @@ from subprocess import run, PIPE
 import os
 import sys
 import socket
+from keyinput import end as end_keyinput
 
 
 from datetime import datetime
@@ -56,7 +57,7 @@ def initialize():
                 context.task = "update commit"
                 if not code.stdout.decode('utf-8').endswith("up to date.\n"):
                     display.center(2, "updated, restarting")
-                    print("restarting!")
+                    # print("restarting!")
                     os.execl(sys.executable, sys.executable, *sys.argv)
 
     display.center(1, "init (link)")
@@ -67,6 +68,10 @@ def initialize():
     init_loop(display)
 
 if __name__ == "__main__":
-    initialize()
+    try:
+        initialize()
+        end_keyinput()
+    except Exception:
+        end_keyinput()
 else:
     report_error("controller not main!")
