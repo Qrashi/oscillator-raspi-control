@@ -230,6 +230,5 @@ def update_display():
             display.center(1, "⨯ tracker link ⨯" if state.tracker_link_last_ping == 0 else "✓ tracker link ✓")
 
         display.center(2, state.ip)
-        display.center(3, f"git: {SHORT_COMMIT}")
 
 
