@@ -12,4 +12,4 @@ class GPIOButtons(ButtonModule):
         ]
 
     def check_status(self, buttonID: int) -> bool:
-        return self.buttons[buttonID].is_held
+        return self.buttons[buttonID].is_active
