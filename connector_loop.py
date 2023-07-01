@@ -228,7 +228,7 @@ def update_display():
         if state.temp_show_button == 0:
             display.center(3, "ready to connect")
         else:
-            display.center(3, "[press] registered!")
+            display.center(3, "[press] registered")
             state.temp_show_button = state.temp_show_button - 1
         if datetime.now().second % 4 < 2:
             display.center(1, "x camera link x" if state.camera_link_last_ping == 0 else "OK camera link OK")

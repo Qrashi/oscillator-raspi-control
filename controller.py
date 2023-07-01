@@ -44,7 +44,7 @@ def initialize():
             report_error("Could not fetch git updates! code: " + str(code.returncode),
                          exception="Log: stdout:\n" + str(code.stdout) + "\nstderr:\n" + str(code.stderr))
         else:
-            if not code.stdout.decode('utf-8').endswith(" "):
+            if len(code.stdout.decode('utf-8')) > 3:
                 # Update found
                 display.center(2, "downloading [2/2]")
                 context.task = "git pull"
