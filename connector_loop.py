@@ -22,6 +22,7 @@ class ConnectorState:
     tl_socket: socket.socket
     ip: str = ""
     ready: bool = False
+    temp_show_button: int = 0
 
 
 class LogicState():
@@ -123,7 +124,8 @@ def check_buttons(button_module: ButtonManager):
                 update_display()
     else:
         if button_module.confirmed() or button_module.experiment():
-            display.center(3, "[press] registered!")
+            state.temp_show_button = 2
+            update_display()
 
 def handle_message(client_socket: socket.socket, connection_type: str):
     while True:
@@ -223,7 +225,11 @@ def update_display():
                 display.center(2, "X wrong Wi-Fi X")
                 return
 
-        display.center(3, "ready to connect")
+        if state.temp_show_button == 0:
+            display.center(3, "ready to connect")
+        else:
+            display.center(3, "[press] registered!")
+            state.temp_show_button = state.temp_show_button - 1
         if datetime.now().second % 4 < 2:
             display.center(1, "x camera link x" if state.camera_link_last_ping == 0 else "OK camera link OK")
         else:
