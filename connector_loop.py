@@ -98,7 +98,7 @@ def init_loop(displ: SmartDisplay):
     state.tl_socket.bind(('', 12736))
     state.tl_socket.listen(1)
     threading.Thread(target=start_display_loop, args=()).start()
-    threading.Thread(target=start_logic_loop, args=())
+    threading.Thread(target=start_logic_loop, args=()).start()
 
 
 def start_logic_loop():
@@ -123,7 +123,6 @@ def check_buttons(button_module: ButtonManager):
                 update_display()
     else:
         if button_module.confirmed() or button_module.experiment():
-            print("reg")
             display.center(3, "[press] registered!")
 
 def handle_message(client_socket: socket.socket, connection_type: str):
