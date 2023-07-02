@@ -122,7 +122,7 @@ def start_logic_loop():
 
 def check_buttons(button_module: ButtonManager):
     if state.shutdown:
-        if button_module.confirmed():
+        if button_module.confirmed() and state.shutdown_timer <= 5:
             state.shutdown = False
             state.shutdown_timer = 0
             update_display()
@@ -130,9 +130,8 @@ def check_buttons(button_module: ButtonManager):
         if experiment.stage == "waiting_user":
             if button_module.confirmed() and button_module.experiment():
                 state.shutdown_timer = state.shutdown_timer + 1
-                if state.shutdown_timer > 10:
+                if state.shutdown_timer > 20:
                     state.shutdown = True
-                    update_display()
                     state.shutdown_timer = 10
                     return
             else:
@@ -149,9 +148,8 @@ def check_buttons(button_module: ButtonManager):
     else:
         if button_module.confirmed() and button_module.experiment():
             state.shutdown_timer = state.shutdown_timer + 1
-            if state.shutdown_timer > 10:
+            if state.shutdown_timer > 20:
                 state.shutdown = True
-                update_display()
                 state.shutdown_timer = 10
                 return
         else:
@@ -228,7 +226,7 @@ def update_display():
         display.left_right(0, f"orc {VERSION}", datetime.now().strftime("%H:%M:%S"))
         display.center(1, "shutting down in")
         display.center(2, f"{state.shutdown_timer / 2} seconds")
-        display.center(3, "[press] to cancel")
+        display.center(3, "[press] to cancel" if state.shutdown_timer <= 5 else "[release] keys")
         if state.shutdown_timer == 0:
             os.system("shutdown -h now")
             os.system("reboot")
