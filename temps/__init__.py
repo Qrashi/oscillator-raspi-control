@@ -1,12 +1,12 @@
 import singlejson
 from singlejson import load
 
-from .base_module import TemperatureProvider
+from .tempkeeper import TempKeeper
 
 
-def init() -> TemperatureProvider:
+def init() -> TempKeeper:
     if load("device.json", default={"device_type": "pc"}).json["device_type"] == "pi":
         from .modules.raspi_temps import RaspiTemp
-        return RaspiTemp()
+        return TempKeeper(RaspiTemp(), 3)
     from .modules.static_temp import StaticTempSimulator
-    return StaticTempSimulator()
+    return TempKeeper(StaticTempSimulator(), 100)
