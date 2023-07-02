@@ -198,7 +198,7 @@ UNKNOWN_MSG = "???"
 def update_display():
     # refresh display
     if state.ready:
-        if experiment.stage not in ["waiting_user_confirm"]: display.left_right(0, f"orc {VERSION}", datetime.now().strftime("%H:%M:%S") + " " + str(temps.get()) + "°C")
+        if experiment.stage not in ["waiting_user_confirm"]: display.left_right(0, str(temps.get()) + "°C", datetime.now().strftime("%H:%M:%S"))
         if experiment.stage == "waiting_user":
             display.center(1, "set up parameters")
             display.center(2, "[press] to continue")
@@ -220,7 +220,7 @@ def update_display():
             display.center(1, "asd")
 
     else:
-        display.left_right(0, f"orc {VERSION}", datetime.now().strftime("%H:%M:%S") + " " + str(temps.get()) + "°C")
+        display.left_right(0, str(temps.get()) + "°C", datetime.now().strftime("%H:%M:%S"))
         # set-up not complete
         if state.ip == "":
             # IP address not set
