@@ -11,12 +11,12 @@ from keyinput import init as init_keyinput
 from keyinput.button_manager import ButtonManager
 
 from temps import init as init_temps
-from temps.base_module import TemperatureProvider
+from temps.tempkeeper import TempKeeper
 
 from datetime import datetime
 
 display: SmartDisplay
-temps: TemperatureProvider
+temps: TempKeeper
 
 
 class ConnectorState:
@@ -198,7 +198,7 @@ UNKNOWN_MSG = "???"
 def update_display():
     # refresh display
     if state.ready:
-        if experiment.stage not in ["waiting_user_confirm"]: display.left_right(0, str(temps.get()) + "°C", datetime.now().strftime("%H:%M:%S"))
+        if experiment.stage not in ["waiting_user_confirm"]: display.left_right(0, f"orc {VERSION}", datetime.now().strftime("%H:%M:%S"))
         if experiment.stage == "waiting_user":
             display.center(1, "set up parameters")
             display.center(2, "[press] to continue")
@@ -220,7 +220,7 @@ def update_display():
             display.center(1, "asd")
 
     else:
-        display.left_right(0, str(temps.get()) + "°C", datetime.now().strftime("%H:%M:%S"))
+        display.left_right(0, str(temps.get()) + "C", datetime.now().strftime("%H:%M:%S"))
         # set-up not complete
         if state.ip == "":
             # IP address not set
