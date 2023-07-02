@@ -126,6 +126,7 @@ def check_buttons(button_module: ButtonManager):
             state.shutdown = False
             state.shutdown_timer = 0
             update_display()
+        return
     if state.ready:
         if experiment.stage == "waiting_user":
             if button_module.confirmed() and button_module.experiment():
@@ -232,6 +233,7 @@ def update_display():
             os.system("reboot")
             sys.exit()
         state.shutdown_timer = state.shutdown_timer - 1
+        return
     if state.ready:
         if experiment.stage not in ["waiting_user_confirm"]: display.left_right(0, f"orc {VERSION}", datetime.now().strftime("%H:%M:%S"))
         if experiment.stage == "waiting_user":
