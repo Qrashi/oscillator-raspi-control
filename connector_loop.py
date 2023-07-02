@@ -1,6 +1,8 @@
+import os
 import re
 import select
 import subprocess
+import sys
 import threading
 
 from display import SmartDisplay
@@ -27,6 +29,8 @@ class ConnectorState:
     ip: str = ""
     ready: bool = False
     temp_show_button: int = 0
+    shutdown_timer: int = 0
+    shutdown: bool = False
 
 
 class LogicState():
@@ -117,8 +121,22 @@ def start_logic_loop():
 
 
 def check_buttons(button_module: ButtonManager):
+    if state.shutdown:
+        if button_module.confirmed():
+            state.shutdown = False
+            state.shutdown_timer = 0
+            update_display()
     if state.ready:
         if experiment.stage == "waiting_user":
+            if button_module.confirmed() and button_module.experiment():
+                state.shutdown_timer = state.shutdown_timer + 1
+                if state.shutdown_timer > 10:
+                    state.shutdown = True
+                    update_display()
+                    state.shutdown_timer = 10
+                    return
+            else:
+                state.shutdown_timer = 0
             if button_module.confirmed():
                 experiment.stage = "waiting_user_confirm"
                 update_display()
@@ -129,6 +147,15 @@ def check_buttons(button_module: ButtonManager):
                 experiment.stage = "waiting_neutral_photo"
                 update_display()
     else:
+        if button_module.confirmed() and button_module.experiment():
+            state.shutdown_timer = state.shutdown_timer + 1
+            if state.shutdown_timer > 10:
+                state.shutdown = True
+                update_display()
+                state.shutdown_timer = 10
+                return
+        else:
+            state.shutdown_timer = 0
         if button_module.confirmed() or button_module.experiment():
             state.temp_show_button = 2
             update_display()
@@ -197,6 +224,16 @@ UNKNOWN_MSG = "???"
 
 def update_display():
     # refresh display
+    if state.shutdown:
+        display.left_right(0, f"orc {VERSION}", datetime.now().strftime("%H:%M:%S"))
+        display.center(1, "shutting down in")
+        display.center(2, f"{state.shutdown_timer / 2} seconds")
+        display.center(3, "[press] to cancel")
+        if state.shutdown_timer == 0:
+            os.system("shutdown -h now")
+            os.system("reboot")
+            sys.exit()
+        state.shutdown_timer = state.shutdown_timer - 1
     if state.ready:
         if experiment.stage not in ["waiting_user_confirm"]: display.left_right(0, f"orc {VERSION}", datetime.now().strftime("%H:%M:%S"))
         if experiment.stage == "waiting_user":
