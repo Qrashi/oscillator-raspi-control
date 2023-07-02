@@ -10,9 +10,13 @@ from time import sleep
 from keyinput import init as init_keyinput
 from keyinput.button_manager import ButtonManager
 
+from temps import init as init_temps
+from temps.base_module import TemperatureProvider
+
 from datetime import datetime
 
 display: SmartDisplay
+temps: TemperatureProvider
 
 
 class ConnectorState:
@@ -91,6 +95,8 @@ def init_ip():
 
 def init_loop(displ: SmartDisplay):
     global display
+    global temps
+    temps = init_temps()
     display = displ
     state.cl_socket = socket.socket()
     state.cl_socket.bind(('', 12735))
@@ -192,11 +198,11 @@ UNKNOWN_MSG = "???"
 def update_display():
     # refresh display
     if state.ready:
-        if experiment.stage not in ["waiting_user_confirm"]: display.left_right(0, f"orc {VERSION}", datetime.now().strftime("%H:%M:%S"))
+        if experiment.stage not in ["waiting_user_confirm"]: display.left_right(0, f"orc {VERSION}", datetime.now().strftime("%H:%M:%S") + " " + str(temps.get()) + "°C")
         if experiment.stage == "waiting_user":
             display.center(1, "set up parameters")
             display.center(2, "[press] to continue")
-            display.right(3, f"#{tracker.current_tracking_id if tracker.current_tracking_id != 0 else UNKNOWN_MSG}")
+            display.left_right(3, f"{temps.get()}°C", f"#{tracker.current_tracking_id if tracker.current_tracking_id != 0 else UNKNOWN_MSG}")
         elif experiment.stage == "waiting_user_confirm":
             display.center(0, "ensure that springs")
             display.center(1, "are in ! NEUTRAL !")
@@ -205,16 +211,16 @@ def update_display():
         elif experiment.stage == "waiting_neutral_photo":
             display.center(1, "DO NOT TOUCH")
             display.center(2, "photo in progress")
-            display.right(3, f"#{tracker.current_tracking_id if tracker.current_tracking_id != 0 else UNKNOWN_MSG}")
+            display.left_right(3, f"{temps.get()}°C", f"#{tracker.current_tracking_id if tracker.current_tracking_id != 0 else UNKNOWN_MSG}")
         elif experiment.stage == "waiting_tl":
             display.center(1, "continue on tracker")
             display.center(2, "waiting...")
-            display.right(3, f"#{tracker.current_tracking_id if tracker.current_tracking_id != 0 else UNKNOWN_MSG}")
+            display.left_right(3, f"{temps.get()}°C", f"#{tracker.current_tracking_id if tracker.current_tracking_id != 0 else UNKNOWN_MSG}")
         elif experiment.stage == "waiting_angle":
             display.center(1, "asd")
 
     else:
-        display.left_right(0, f"orc {VERSION}", datetime.now().strftime("%H:%M:%S"))
+        display.left_right(0, f"orc {VERSION}", datetime.now().strftime("%H:%M:%S") + " " + str(temps.get()) + "°C")
         # set-up not complete
         if state.ip == "":
             # IP address not set
